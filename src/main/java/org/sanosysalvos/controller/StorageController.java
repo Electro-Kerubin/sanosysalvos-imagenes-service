@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/storage")
 @RequiredArgsConstructor
@@ -19,8 +21,11 @@ public class StorageController {
             @PathVariable Long idReporte,
             @RequestParam("file") MultipartFile file
     ) throws Exception {
-        String url = storageService.uploadFile(file, idReporte);
-        String key = url.substring(url.indexOf("reportes/"));
-        return ResponseEntity.ok(new UploadResponseDto(url, key, idReporte));
+        return ResponseEntity.ok(storageService.uploadFile(file, idReporte));
+    }
+
+    @GetMapping("/fotos/{idReporte}")
+    public ResponseEntity<List<String>> getFotos(@PathVariable Long idReporte) {
+        return ResponseEntity.ok(storageService.getFotosByReporte(idReporte));
     }
 }
